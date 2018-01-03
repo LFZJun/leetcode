@@ -11,7 +11,7 @@ func Test1(t *testing.T) {
 }
 
 func Test1V1(t *testing.T) {
-	fmt.Println(twoSumV0([]int{1, 2, 3}, 3))
+	fmt.Println(twoSumV0([]int{1, 2, 3, 5, 6}, 5))
 }
 
 func Test2(t *testing.T) {

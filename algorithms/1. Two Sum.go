@@ -27,7 +27,7 @@ func twoSumV0(nums []int, target int) []int {
 	left, right := 0, len(nums)-1
 	var t int
 	for left < right {
-		t = nums[left] + right
+		t = nums[left] + nums[right]
 		if t == target {
 			return []int{left, right}
 		} else if t < target {
