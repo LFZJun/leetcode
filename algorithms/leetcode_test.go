@@ -195,6 +195,10 @@ func Test64(t *testing.T) {
 	}))
 }
 
+func Test67(t *testing.T) {
+	fmt.Println(addBinary("11", "11"))
+}
+
 func Test70(t *testing.T) {
 	fmt.Println(climbStairs(10))
 }
