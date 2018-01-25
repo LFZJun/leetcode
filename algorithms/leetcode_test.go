@@ -175,6 +175,10 @@ func Test53(t *testing.T) {
 	fmt.Println(maxSubArray([]int{-2, 1, -3, 4, -1, 2, 1, -5, 4}))
 }
 
+func Test56(t *testing.T) {
+	fmt.Println(merge([]Interval{{1, 3}, {2, 6}, {8, 10}, {15, 18}}))
+}
+
 func Test62(t *testing.T) {
 	fmt.Println(uniquePaths(1, 2))
 }

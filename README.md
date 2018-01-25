@@ -44,6 +44,7 @@ golang
 | 38   | [Count and Say](algorithms/38.%20Count%20and%20Say.go)                                                                      | String                                            |
 | 44   | [Wildcard Matching](algorithms/44.%20Wildcard%20Matching.go)                                                                | String, Dynamic Programming, Backtracking, Greedy |
 | 53   | [Maximum Subarray](algorithms/53.%20Maximum%20Subarray.go)                                                                  | Array, Divide and Conquer, Dynamic Programming    |
+| 56   | [Merge Intervals](algorithms/56.%20Merge%20Intervals.go)                                                                  | Array,Sort    |
 | 62   | [Unique Paths](algorithms/62.%20Unique%20Paths.go)                                                                          | Array, Dynamic Programming                        |
 | 63   | [Unique Paths II](algorithms/63.%20Unique%20Paths%20II.go)                                                                  | Array, Dynamic Programming                        |
 | 64   | [Minimum Path Sum](algorithms/64.%20Minimum%20Path%20Sum.go)                                                                | Array, Dynamic Programming                        |
