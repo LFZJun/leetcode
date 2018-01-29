@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/LFZJun/leetcode.svg?branch=master)](https://travis-ci.org/LFZJun/leetcode)
+[![codecov](https://codecov.io/gh/LFZJun/leetcode/branch/master/graph/badge.svg)](https://codecov.io/gh/LFZJun/leetcode)
+
 # Leetcode
 
 golang
