@@ -1,6 +1,6 @@
 package algorithms
 
-import "github.com/LFZJun/leetcode/algorithms/util"
+import "github.com/ljun20160606/leetcode/algorithms/util"
 
 //Given a m x n grid filled with non-negative numbers, find a path from top left to bottom right which minimizes the sum of all numbers along its path.
 //

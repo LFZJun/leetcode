@@ -1,6 +1,6 @@
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/LFZJun/leetcode/blob/master/LICENSE)
-[![Build Status](https://travis-ci.org/LFZJun/leetcode.svg?branch=master)](https://travis-ci.org/LFZJun/leetcode)
-[![codecov](https://codecov.io/gh/LFZJun/leetcode/branch/master/graph/badge.svg)](https://codecov.io/gh/LFZJun/leetcode)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/ljun20160606/leetcode/blob/master/LICENSE)
+[![Build Status](https://travis-ci.org/ljun20160606/leetcode.svg?branch=master)](https://travis-ci.org/ljun20160606/leetcode)
+[![codecov](https://codecov.io/gh/ljun20160606/leetcode/branch/master/graph/badge.svg)](https://codecov.io/gh/ljun20160606/leetcode)
 
 # Leetcode
 

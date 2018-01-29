@@ -1,6 +1,6 @@
 package origin
 
-import "github.com/LFZJun/leetcode/algorithms/util"
+import "github.com/ljun20160606/leetcode/algorithms/util"
 
 //     背包体积
 //种类 \ 0 1 2 3 4 5 6

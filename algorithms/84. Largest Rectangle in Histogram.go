@@ -1,6 +1,6 @@
 package algorithms
 
-import "github.com/LFZJun/leetcode/algorithms/util"
+import "github.com/ljun20160606/leetcode/algorithms/util"
 
 //Given n non-negative integers representing the histogram's bar height where the width of each bar is 1, find the area of largest rectangle in the histogram.
 //

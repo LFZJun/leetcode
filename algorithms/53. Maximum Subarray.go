@@ -1,7 +1,7 @@
 package algorithms
 
 import (
-	"github.com/LFZJun/leetcode/algorithms/util"
+	"github.com/ljun20160606/leetcode/algorithms/util"
 )
 
 //Find the contiguous subarray within an array (containing at least one number) which has the largest sum.
