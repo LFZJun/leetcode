@@ -4,14 +4,27 @@ import (
 	"fmt"
 	"github.com/davecgh/go-spew/spew"
 	"testing"
+	"reflect"
 )
 
 func Test1(t *testing.T) {
-	fmt.Println(twoSum([]int{1, 3, 2}, 3))
+	sum := twoSum([]int{1, 3, 2}, 3)
+	if !reflect.DeepEqual(sum, []int{0, 2}) {
+		t.Fatal("result must be 0, 2")
+	}
+	if len(twoSum([]int{}, 1)) != 0 {
+		t.Fatal("result must be []")
+	}
 }
 
 func Test1V1(t *testing.T) {
-	fmt.Println(twoSumV0([]int{1, 2, 3, 5, 6}, 5))
+	v0 := twoSumV0([]int{1, 2, 3, 5, 6}, 5)
+	if !reflect.DeepEqual(v0, []int{1, 2}) {
+		t.Fatal("result must be 1, 2")
+	}
+	if len(twoSumV0([]int{}, 1)) != 0 {
+		t.Fatal("result must be []")
+	}
 }
 
 func Test2(t *testing.T) {
@@ -63,7 +76,15 @@ func Test9(t *testing.T) {
 }
 
 func Test10(t *testing.T) {
-	fmt.Println(isMatch("abc", "a*c"))
+	if isMatch("abc", "a*c") {
+		t.Fatal("should be false")
+	}
+}
+
+func Test10V1(t *testing.T) {
+	if !isMatchV1("abc", "a.c") {
+		t.Fatal("should be true")
+	}
 }
 
 func Test11(t *testing.T) {
@@ -79,7 +100,14 @@ func Test13(t *testing.T) {
 }
 
 func Test14(t *testing.T) {
-	fmt.Println(longestCommonPrefix([]string{"a", "a", "a"}))
+	a := longestCommonPrefix([]string{"ab", "a", "ac", "abd"})
+	if a != "a" {
+		t.Fatal("result should be a")
+	}
+	none := longestCommonPrefix([]string{})
+	if none != "" {
+		t.Fatal("result should be ")
+	}
 }
 
 func Test15(t *testing.T) {
