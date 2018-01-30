@@ -14,7 +14,14 @@ func mergeKListsV0(lists []*ListNode) *ListNode {
 	return r
 }
 
-func helper(lists []*ListNode) *ListNode {
+func mergeKLists(lists []*ListNode) *ListNode {
+	if len(lists) == 0 {
+		return nil
+	}
+	return mergeKListsHelper(lists)
+}
+
+func mergeKListsHelper(lists []*ListNode) *ListNode {
 	length := len(lists)
 	half := length / 2
 
@@ -57,11 +64,4 @@ func helper(lists []*ListNode) *ListNode {
 		return res
 	}
 	return mergeKLists([]*ListNode{mergeKLists(lists[half:]), mergeKLists(lists[:half])})
-}
-
-func mergeKLists(lists []*ListNode) *ListNode {
-	if len(lists) == 0 {
-		return nil
-	}
-	return helper(lists)
 }

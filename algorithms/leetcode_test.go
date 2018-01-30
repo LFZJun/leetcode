@@ -3,26 +3,30 @@ package algorithms
 import (
 	"fmt"
 	"github.com/davecgh/go-spew/spew"
-	"testing"
 	"reflect"
+	"testing"
 )
 
 func Test1(t *testing.T) {
-	sum := twoSum([]int{1, 3, 2}, 3)
-	if !reflect.DeepEqual(sum, []int{0, 2}) {
+	if !reflect.DeepEqual(twoSum([]int{1, 3, 2}, 3), []int{0, 2}) {
 		t.Fatal("result must be 0, 2")
 	}
 	if len(twoSum([]int{}, 1)) != 0 {
 		t.Fatal("result must be []")
 	}
+	if len(twoSum([]int{1, 3, 2}, 6)) != 0 {
+		t.Fatal("result must be []")
+	}
 }
 
 func Test1V1(t *testing.T) {
-	v0 := twoSumV0([]int{1, 2, 3, 5, 6}, 5)
-	if !reflect.DeepEqual(v0, []int{1, 2}) {
+	if !reflect.DeepEqual(twoSumV0([]int{1, 2, 3, 5, 6}, 5), []int{1, 2}) {
 		t.Fatal("result must be 1, 2")
 	}
 	if len(twoSumV0([]int{}, 1)) != 0 {
+		t.Fatal("result must be []")
+	}
+	if len(twoSumV0([]int{1, 3, 2}, 6)) != 0 {
 		t.Fatal("result must be []")
 	}
 }
@@ -82,7 +86,25 @@ func Test10(t *testing.T) {
 }
 
 func Test10V1(t *testing.T) {
-	if !isMatchV1("abc", "a.c") {
+	if isMatchV1("aa", "a") {
+		t.Fatal("should be false")
+	}
+	if !isMatchV1("aa", "aa") {
+		t.Fatal("should be true")
+	}
+	if isMatchV1("aaa", "aa") {
+		t.Fatal("should be false")
+	}
+	if !isMatchV1("aa", "a*") {
+		t.Fatal("should be true")
+	}
+	if !isMatchV1("aa", ".*") {
+		t.Fatal("should be true")
+	}
+	if !isMatchV1("ab", ".*") {
+		t.Fatal("should be true")
+	}
+	if !isMatchV1("aab", "c*a*b") {
 		t.Fatal("should be true")
 	}
 }
@@ -257,7 +279,26 @@ func Test85(t *testing.T) {
 }
 
 func Test91(t *testing.T) {
-	fmt.Println(numDecodings("1345"))
+	decodings := numDecodings("1345")
+	if decodings != 2 {
+		t.Fatal("decodings should be 2")
+	}
+}
+
+func Test94(t *testing.T) {
+	r := inorderTraversal(&TreeNode{1,
+		nil, &TreeNode{Val: 2,
+			Left: &TreeNode{Val: 3}, Right: nil}})
+	if !reflect.DeepEqual(r, []int{1, 3, 2}) {
+		t.Fatal(r)
+	}
+}
+
+func Test96(t *testing.T) {
+	trees := numTrees(3)
+	if trees != 5 {
+		t.Fatal("trees should be 5")
+	}
 }
 
 func Test100(t *testing.T) {
@@ -289,6 +330,11 @@ func Test100(t *testing.T) {
 	}
 }
 
-func Test96(t *testing.T) {
-	fmt.Println(numTrees(3))
+func Test206(t *testing.T) {
+	if !reflect.DeepEqual(
+		reverseList(&ListNode{1, &ListNode{2, nil}}),
+		&ListNode{2, &ListNode{1, nil}},
+	) {
+		t.Fatal("not equal")
+	}
 }
