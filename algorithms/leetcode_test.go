@@ -232,6 +232,35 @@ func Test91(t *testing.T) {
 	fmt.Println(numDecodings("1345"))
 }
 
+func Test100(t *testing.T) {
+	isSameOne := isSameTree(
+		&TreeNode{1, &TreeNode{Val: 2}, &TreeNode{Val: 3}},
+		&TreeNode{1, &TreeNode{Val: 2}, &TreeNode{Val: 3}},
+	)
+
+	if !isSameOne {
+		t.Fatal("[1, 2, 3] and [1, 2, 3] are same")
+	}
+
+	isSameTwo := isSameTree(
+		&TreeNode{1, &TreeNode{Val: 2}, nil},
+		&TreeNode{1, nil, &TreeNode{Val: 3}},
+	)
+
+	if isSameTwo {
+		t.Fatal("[1, 2] and [1, null, 3] are not same")
+	}
+
+	isSameThree := isSameTree(
+		&TreeNode{1, &TreeNode{Val: 2}, &TreeNode{Val: 1}},
+		&TreeNode{1, &TreeNode{Val: 1}, &TreeNode{Val: 2}},
+	)
+
+	if isSameThree {
+		t.Fatal("[1, 1, 2] and [1, 2, 1] are not same")
+	}
+}
+
 func Test96(t *testing.T) {
 	fmt.Println(numTrees(3))
 }
