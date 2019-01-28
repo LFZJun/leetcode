@@ -10,7 +10,6 @@ import (
 )
 
 func init() {
-	di.Verbose = false
 	di.Put(new(commandCenter))
 }
 
@@ -29,7 +28,7 @@ func (cc *commandCenter) Init() {
 			if c.NArg() > 0 {
 				path = c.Args()[0]
 			} else {
-				path = leetcodeCli.Config.DefaultLeetcodeJson
+				path = leetcodeCli.CmdConfig.Lock.Leetcode
 			}
 			logger.Println("拉取所有leetcode题目至", path)
 			lc.WriteCatalog(path)
@@ -48,7 +47,7 @@ func (cc *commandCenter) Init() {
 			cli.StringFlag{
 				Name:  flagPath.String(),
 				Usage: "本地leetcode.json路径",
-				Value: leetcodeCli.Config.DefaultLeetcodeJson,
+				Value: leetcodeCli.CmdConfig.Lock.Leetcode,
 			},
 			cli.BoolFlag{
 				Name:  flagInteract.String(),
@@ -60,7 +59,7 @@ func (cc *commandCenter) Init() {
 			if c.Bool(flagInteract.Flag()) {
 				var idsStr = ""
 				prompt := &survey.Input{Message: "请输入 QuestionID"}
-				survey.AskOne(prompt, &idsStr, nil)
+				_ = survey.AskOne(prompt, &idsStr, nil)
 				idsStrs = strings.Split(strings.Trim(idsStr, " "), " ")
 				if len(idsStrs) == 0 || len(idsStrs[0]) == 0 {
 					return errors.New("请输入 e.g. 1 2 3 4 5")

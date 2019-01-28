@@ -1,0 +1,19 @@
+cmd:
+  lock:
+    leetcode: ../leetcode.json
+    algorithms: ../algorithms.json
+  generation:
+    readme: ../README.md
+    algorithms: ../algorithms
+  params:
+    operation-name: question
+    leetcode-com: https://leetcode.com
+    graphql: https://leetcode.com/graphql
+    problems-all-url: https://leetcode.com/api/problems/all/
+    description: https://leetcode.com/problems/%v/description/
+    lang: go
+  template:
+    solution: solution.tpl.txt
+    problem: problem.tpl.txt
+    readme: readme.tpl.txt
+    unittest: unittest.tpl.txt

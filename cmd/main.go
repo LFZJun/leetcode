@@ -13,14 +13,17 @@ import (
 //   (2) 抓取描述
 //   (3) 根据Problem建立文件
 func main() {
-	di.TomlLoadFile("cmd/config.toml")
+	err := di.ConfigLoadFile("./config.yaml", di.YAML)
+	if err != nil {
+		log.Fatal(err)
+	}
 	di.Start()
 	app := cli.NewApp()
 	app.Name = "leetcode"
-	app.Version = "0.2.1"
+	app.Version = "0.3.0"
 	app.Usage = "leetcode刷题辅助工具"
 	app.Commands = append(lc.Commands)
-	err := app.Run(os.Args)
+	err = app.Run(os.Args)
 	if err != nil {
 		log.Fatal(err)
 	}

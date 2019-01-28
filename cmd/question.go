@@ -1,9 +1,9 @@
 package main
 
 import (
-	"errors"
 	"github.com/PuerkitoBio/goquery"
 	"github.com/ljun20160606/gox/fs"
+	"github.com/pkg/errors"
 	"io"
 	"path/filepath"
 	"strings"
@@ -21,6 +21,7 @@ type solutionTemplate struct {
 	Content       string
 }
 
+// 在指定目录下生成题目
 func newQuestion(problem *problem, dirPrefix string) *question {
 	fileName := offsetNumber(problem.QuestionID, '0', 3)
 	return &question{
@@ -30,6 +31,7 @@ func newQuestion(problem *problem, dirPrefix string) *question {
 	}
 }
 
+// 生成题解
 func (q *question) WriteSolution(solutionTplPath string) error {
 	return fs.WriteFileNotExist(filepath.Join(q.DirPath, README), func(writer io.Writer) error {
 		tpl, err := template.ParseFiles(solutionTplPath)
@@ -52,23 +54,20 @@ func (q *question) WriteSolution(solutionTplPath string) error {
 	})
 }
 
-func (q *question) WriteProblem(problemTpl string) error {
-	return fs.WriteFileNotExist(filepath.Join(q.DirPath, q.QuestionFrontendID+". "+q.Title+".go"), func(writer io.Writer) error {
+// 生成题目 problem
+func (q *question) WriteProblem(lang, problemTpl string) error {
+	language := MatchLang(lang)
+	if language == nil {
+		return errors.Errorf("local not support %v.", language)
+	}
+	return fs.WriteFileNotExist(filepath.Join(q.DirPath, q.QuestionFrontendID+". "+q.Title+"."+language.Extension), func(writer io.Writer) error {
 		tpl, err := template.ParseFiles(problemTpl)
 		if err != nil {
 			return err
 		}
-		languages := []Language{Go, Java}
-		snippet := getCodeSnippet(q.CodeSnippets, languages)
+		snippet := getCodeSnippet(q.CodeSnippets, *language)
 		if snippet == nil {
-			var hint strings.Builder
-			for i := range languages {
-				hint.WriteString(languages[i].Lang)
-				if i != len(languages)-1 {
-					hint.WriteString(" or ")
-				}
-			}
-			return errors.New("Not support " + hint.String() + ".")
+			return errors.New("remote not support " + Go.Lang + ".")
 		}
 		err = tpl.Execute(writer, snippet)
 		if err != nil {
@@ -78,17 +77,16 @@ func (q *question) WriteProblem(problemTpl string) error {
 	})
 }
 
-func getCodeSnippet(cs []codeSnippet, expect []Language) *codeSnippet {
-	for i := range expect {
-		for j := range cs {
-			if cs[j].Lang == expect[i].Lang {
-				return &cs[j]
-			}
+func getCodeSnippet(cs []codeSnippet, expect Language) *codeSnippet {
+	for j := range cs {
+		if cs[j].Lang == expect.Lang {
+			return &cs[j]
 		}
 	}
 	return nil
 }
 
+// 生成题目 problem 的单元测试模版
 func (q *question) WriteUnittest(unittestTpl string) error {
 	return fs.WriteFileNotExist(filepath.Join(q.DirPath, q.QuestionFrontendID+"_test.go"), func(writer io.Writer) error {
 		tpl, err := template.ParseFiles(unittestTpl)

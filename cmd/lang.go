@@ -1,5 +1,7 @@
 package main
 
+import "strings"
+
 type Language struct {
 	Lang      string
 	Extension string
@@ -34,4 +36,18 @@ var (
 		Lang:      "Go",
 		Extension: "go",
 	}
+
+	langs = []Language{
+		Cpp, C, Java, Python, Python3, JavaScript, Go,
+	}
 )
+
+func MatchLang(str string) *Language {
+	for i := range langs {
+		language := langs[i]
+		if strings.EqualFold(language.Lang, str) {
+			return &language
+		}
+	}
+	return nil
+}

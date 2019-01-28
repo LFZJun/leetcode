@@ -19,7 +19,6 @@ import (
 )
 
 const (
-	algorithms    = "algorithms"
 	csrftoken     = "csrftoken"
 	README        = "README.md"
 	LeetcodeQuery = "query question($titleSlug: String!) {\n  question(titleSlug: $titleSlug) {\n    questionId\n    questionFrontendId\n    boundTopicId\n    title\n    content\n    translatedTitle\n    translatedContent\n    isPaidOnly\n    difficulty\n    likes\n    dislikes\n    isLiked\n    similarQuestions\n    contributors {\n      username\n      profileUrl\n      avatarUrl\n      __typename\n    }\n    langToValidPlayground\n    topicTags {\n      name\n      slug\n      translatedName\n      __typename\n    }\n    companyTagStats\n    codeSnippets {\n      lang\n      langSlug\n      code\n      __typename\n    }\n    stats\n    hints\n    solution {\n      canSeeDetail\n      __typename\n    }\n    status\n    sampleTestCase\n    metaData\n    judgerAvailable\n    judgeType\n    mysqlSchemas\n    enableRunCode\n    enableTestMode\n    envInfo\n    __typename\n  }\n}\n"
@@ -50,7 +49,7 @@ type leetcodeCli struct {
 	items      []item
 	Commands   []cli.Command
 	HttpClient simplehttp.Client `di:"*"`
-	Config     *config           `di:"*"`
+	CmdConfig  Cmd               `di:"#.{cmd}"`
 }
 
 func (l *leetcodeCli) Init() {
@@ -61,6 +60,7 @@ func (l *leetcodeCli) AddCommand(command cli.Command) {
 	l.Commands = append(l.Commands, command)
 }
 
+// readme添加item
 func (l *leetcodeCli) AddItem(q *question) {
 	var topics []string
 	for e := range q.TopicTags {
@@ -96,7 +96,7 @@ func (l *leetcodeCli) Gen(ids []int) {
 	for e := range stats {
 		stat := stats[e]
 		batch.Queue(func(wu pool.WorkUnit) (r interface{}, err error) {
-			descriptionUrl := fmt.Sprintf(l.Config.DescriptionTemplate, stat.QuestionTitleSlug)
+			descriptionUrl := fmt.Sprintf(l.CmdConfig.Params.Description, stat.QuestionTitleSlug)
 			logger.Println("Fetch", stat.QuestionID, stat.QuestionTitle, descriptionUrl)
 			err = simplehttp.NewRequest(l.HttpClient).Get().SetUrl(descriptionUrl).Send().Error()
 			if err != nil {
@@ -106,7 +106,7 @@ func (l *leetcodeCli) Gen(ids []int) {
 
 			// 获取csrftoken，查询graphQL需要在header中添加x-csrftoken
 			httpClient := l.HttpClient.(*simplehttp.HttpClient)
-			parse, _ := url.Parse(l.Config.LeetcodeCom)
+			parse, _ := url.Parse(l.CmdConfig.Params.LeetcodeCom)
 			jar := httpClient.Jar.Cookies(parse)
 			for _, v := range jar {
 				if v.Name == csrftoken {
@@ -122,12 +122,12 @@ func (l *leetcodeCli) Gen(ids []int) {
 			}
 
 			// 查询question
-			qlResp, err := l.queryGraphQL(descriptionUrl, l.Config.OperationName, stat.QuestionTitleSlug)
+			qlResp, err := l.queryGraphQL(descriptionUrl, l.CmdConfig.Params.OperationName, stat.QuestionTitleSlug)
 			if err != nil {
 				logger.Fatal(err)
 				return
 			}
-			q := newQuestion(&qlResp.Data.Question, algorithms)
+			q := newQuestion(&qlResp.Data.Question, l.CmdConfig.Generation.Algorithms)
 
 			// 生成文件夹
 			err = fs.MkdirP(q.DirPath)
@@ -136,24 +136,21 @@ func (l *leetcodeCli) Gen(ids []int) {
 			}
 
 			// 生成题解
-			err = q.WriteSolution(l.Config.SolutionTpl)
+			err = q.WriteSolution(l.CmdConfig.Template.Solution)
 			if err != nil {
 				return
 			}
 
-			// 生成题目 problem
-			err = q.WriteProblem(l.Config.ProblemTpl)
+			err = q.WriteProblem(l.CmdConfig.Params.Lang, l.CmdConfig.Template.Problem)
 			if err != nil {
 				return
 			}
 
-			// 生成题目 problem 的单元测试模版
-			err = q.WriteUnittest(l.Config.UnittestTpl)
+			err = q.WriteUnittest(l.CmdConfig.Template.Unittest)
 			if err != nil {
 				return
 			}
 
-			// readme添加item
 			l.AddItem(q)
 			return
 		})
@@ -164,7 +161,7 @@ func (l *leetcodeCli) Gen(ids []int) {
 
 // 读取algorithms.json
 func (l *leetcodeCli) ReadLock() {
-	err := fs.ReadJSON(l.Config.AlgorithmsLock, &l.items)
+	err := fs.ReadJSON(l.CmdConfig.Lock.Algorithms, &l.items)
 	if err != nil {
 		logger.Println(err)
 		panic(err)
@@ -173,7 +170,7 @@ func (l *leetcodeCli) ReadLock() {
 
 // 写algorithms.json
 func (l *leetcodeCli) WriteLock() {
-	err := fs.WriteJSON(l.Config.AlgorithmsLock, &l.items)
+	err := fs.WriteJSON(l.CmdConfig.Lock.Algorithms, &l.items)
 	if err != nil {
 		logger.Println(err)
 		panic(err)
@@ -197,7 +194,7 @@ func (l *leetcodeCli) queryGraphQL(referer, operationName, titleSlug string) (*g
 			TitleSlug string `json:"titleSlug"`
 		}{TitleSlug: titleSlug},
 	}
-	resp := request.Post().SetUrl(l.Config.Graphql).
+	resp := request.Post().SetUrl(l.CmdConfig.Params.Graphql).
 		Head("referer", referer).
 		Head("x-csrftoken", l.xCsrftoken).
 		Head("content-type", "application/json").
@@ -224,8 +221,8 @@ func (l *leetcodeCli) ReadCatalog(path string, reGen bool) {
 
 // 生成leetcode.json
 func (l *leetcodeCli) WriteCatalog(path string) {
-	fs.WriteFileNotExist(path, func(writer io.Writer) error {
-		b, err := simplehttp.NewRequest(l.HttpClient).Get().SetUrl(l.Config.ProblemsAllUrl).Send().Body()
+	_ = fs.WriteFileNotExist(path, func(writer io.Writer) error {
+		b, err := simplehttp.NewRequest(l.HttpClient).Get().SetUrl(l.CmdConfig.Params.ProblemsAllURL).Send().Body()
 		if err != nil {
 			panic(err)
 		}
@@ -238,8 +235,8 @@ func (l *leetcodeCli) WriteCatalog(path string) {
 }
 
 func (l *leetcodeCli) WriteReadme() {
-	fs.WriteFile(README, func(writer io.Writer) error {
-		tpl, err := template.ParseFiles(l.Config.ReadmeTpl)
+	_ = fs.WriteFile(l.CmdConfig.Generation.Readme, func(writer io.Writer) error {
+		tpl, err := template.ParseFiles(l.CmdConfig.Template.Readme)
 		if err != nil {
 			return err
 		}
