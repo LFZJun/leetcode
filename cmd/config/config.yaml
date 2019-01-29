@@ -13,7 +13,7 @@ cmd:
     description: https://leetcode.com/problems/%v/description/
     lang: go
   template:
-    solution: solution.tpl.txt
-    problem: problem.tpl.txt
-    readme: readme.tpl.txt
-    unittest: unittest.tpl.txt
+    solution: config/solution.tpl.txt
+    problem: config/problem.tpl.txt
+    readme: config/readme.tpl.txt
+    unittest: config/unittest.tpl.txt

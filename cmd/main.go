@@ -13,7 +13,7 @@ import (
 //   (2) 抓取描述
 //   (3) 根据Problem建立文件
 func main() {
-	err := di.ConfigLoadFile("./config.yaml", di.YAML)
+	err := di.ConfigLoadFile("./config/config.yaml", di.YAML)
 	if err != nil {
 		log.Fatal(err)
 	}
