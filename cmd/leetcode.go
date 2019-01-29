@@ -6,7 +6,6 @@ import (
 	"github.com/ljun20160606/di"
 	"github.com/ljun20160606/gox/fs"
 	"github.com/ljun20160606/simplehttp"
-	"github.com/urfave/cli"
 	"gopkg.in/go-playground/pool.v3"
 	"io"
 	"log"
@@ -47,17 +46,12 @@ type leetcodeCli struct {
 	problems   *problems
 	lock       sync.Mutex
 	items      []item
-	Commands   []cli.Command
 	HttpClient simplehttp.Client `di:"*"`
 	CmdConfig  Cmd               `di:"#.{cmd}"`
 }
 
 func (l *leetcodeCli) Init() {
 	l.problems = new(problems)
-}
-
-func (l *leetcodeCli) AddCommand(command cli.Command) {
-	l.Commands = append(l.Commands, command)
 }
 
 // readme添加item

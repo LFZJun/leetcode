@@ -15,5 +15,5 @@ cmd:
   template:
     solution: config/solution.tpl.txt
     problem: config/problem.tpl.txt
-    readme: config/readme.tpl.txt
+    readme: config/readme.tpl.md
     unittest: config/unittest.tpl.txt

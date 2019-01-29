@@ -20,9 +20,9 @@
 
 ## Algorithms
 
-| #    | Title                                                                      | Topics                                            | Difficulty |
-| :--- | :------------------------------------------------------------------------- | :------------------------------------------------ | :----------|
-{{range .}}|{{.ID}} | {{.Title}} | {{.Topics}} | {{.Difficulty}} |
+| #           | Title   | Topics     | Difficulty  |
+| :---------- | :------ | :--------- | :---------- |
+| {{range .}} | {{.ID}} | {{.Title}} | {{.Topics}} | {{.Difficulty}} |
 {{end}}
 ## Other
 
@@ -33,17 +33,22 @@
 
 ## Cmd
 
+从[Release](https://github.com/ljun20160606/leetcode/releases)中下载对应系统的命令行工具
+
+### Pull 抓取题目
+
 用于自动生成需要写的题目并重新生成README.md
 
 ```bash
-# 进入cmd
-$ cd cmd
-# 获取依赖
-$ go get -v -u
-# 编译cli
-$ ./build
-# 返回项目目录
-$ cd ..
 # 拉题目
 $ leetcode-cli pull 1
+```
+
+### Update 更新
+
+#### Readme
+
+```bash
+// 根据模版文件更新readme
+$ leetcode-cli update readme
 ```

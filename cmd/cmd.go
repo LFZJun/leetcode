@@ -15,14 +15,21 @@ func init() {
 
 type commandCenter struct {
 	LeetcodeCli *leetcodeCli `di:"*"`
+	App         *cli.App     `di:"*"`
 }
 
 func (cc *commandCenter) Init() {
 	leetcodeCli := cc.LeetcodeCli
 
-	leetcodeCli.AddCommand(cli.Command{
+	// update
+	updateCmd := cli.Command{
 		Name:  "update",
-		Usage: "抓取所有leetcode题目",
+		Usage: "更新数据",
+	}
+
+	updateCmd.Subcommands = append(updateCmd.Subcommands, cli.Command{
+		Name:  "leetcode",
+		Usage: "更新leetcode题目表",
 		Action: func(c *cli.Context) error {
 			var path string
 			if c.NArg() > 0 {
@@ -36,7 +43,19 @@ func (cc *commandCenter) Init() {
 		},
 	})
 
-	leetcodeCli.AddCommand(cli.Command{
+	updateCmd.Subcommands = append(updateCmd.Subcommands, cli.Command{
+		Name:  "readme",
+		Usage: "重新生成readme",
+		Action: func(c *cli.Context) error {
+			leetcodeCli.WriteReadme()
+			return nil
+		},
+	})
+
+	cc.App.Commands = append(cc.App.Commands, updateCmd)
+
+	// pull
+	cc.App.Commands = append(cc.App.Commands, cli.Command{
 		Name:  "pull",
 		Usage: "查询本地leetcode.json，然后抓取制定题目",
 		Flags: []cli.Flag{
